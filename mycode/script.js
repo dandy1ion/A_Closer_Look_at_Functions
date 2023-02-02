@@ -339,7 +339,7 @@ Here are your tasks:
 
 1. Create a method called 'registerNewAnswer' on the 'poll' object. The method does 2 things:
   1.1. Display a prompt window for the user to input the number of the selected option. The prompt should look like this:
-        What is your favourite programming language?
+        What is your favorite programming language?
         0: JavaScript
         1: Python
         2: Rust
@@ -361,8 +361,9 @@ BONUS TEST DATA 2: [1, 5, 3, 9, 6, 1]
 GOOD LUCK!!!
 */
 
+/*
 const poll = {
-  question: 'What is your favourite programming language?',
+  question: 'What is your favorite programming language?',
   options: ['0: JavaScript', '1: Python', '2: Rust', '3: C++'],
   //This generates [0, 0, 0, 0]. More in the next section
   answers: new Array(4).fill(0),
@@ -373,7 +374,7 @@ const poll = {
         `${this.question}\n${this.options.join('\n')}\n(Write option number)`
       )
     );
-    //What is your favourite programming language?
+    //What is your favorite programming language?
     //    0: JavaScript
     //    1: Python
     //    2: Rust
@@ -381,6 +382,45 @@ const poll = {
     //    (Write option number)
     console.log(answer);
 
+    //check answer for number & that it makes sense
     //Register Answer
+    typeof answer === 'number' &&
+      answer < this.answers.length &&
+      this.answers[answer]++;
+
+    //display results
+    this.displayResults();
+    this.displayResults('string');
+  },
+
+  //display results method (default of type set to array)
+  displayResults(type = 'array') {
+    if (type === 'array') {
+      console.log(this.answers);
+    } else if (type === 'string') {
+      console.log(`Poll results are ${this.answers.join(', ')}.`);
+      //Like: "Poll results are 13, 2, 4, 1."
+    }
   },
 };
+
+//poll.registerNewAnswer();
+//call method whenever click "Answer Poll" button
+document
+  .querySelector('.poll')
+  .addEventListener('click', poll.registerNewAnswer.bind(poll));
+//bind to poll for assignment of this keyword
+
+//BONUS
+//BONUS TEST DATA 1: [5, 2, 3]
+//BONUS TEST DATA 2: [1, 5, 3, 9, 6, 1]
+//use call method to manually set the this keyword to a new object
+//as the answer property has the new array
+poll.displayResults.call({ answers: [5, 2, 3] }, 'string'); //logged as string
+poll.displayResults.call({ answers: [5, 2, 3] }); // logged as array
+poll.displayResults.call({ answers: [1, 5, 3, 9, 6, 1] }, 'string'); //logged as string
+poll.displayResults.call({ answers: [1, 5, 3, 9, 6, 1] }); // logged as array
+*/
+
+/////////////////////////////////////////////////////////////////////////
+//IMMEDIATELY INVOKED FUNCTION EXPRESSIONS (IIFE)
