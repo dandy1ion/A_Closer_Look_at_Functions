@@ -420,7 +420,67 @@ poll.displayResults.call({ answers: [5, 2, 3] }, 'string'); //logged as string
 poll.displayResults.call({ answers: [5, 2, 3] }); // logged as array
 poll.displayResults.call({ answers: [1, 5, 3, 9, 6, 1] }, 'string'); //logged as string
 poll.displayResults.call({ answers: [1, 5, 3, 9, 6, 1] }); // logged as array
-*/
+
 
 /////////////////////////////////////////////////////////////////////////
 //IMMEDIATELY INVOKED FUNCTION EXPRESSIONS (IIFE)
+//disappears right after it's called once
+//will need this technique later with things like async/await
+
+//nothing stopping us from running it more times
+const runOnce = function () {
+  console.log('This will never run again, unless I call it again.');
+};
+runOnce();
+
+//IIFE (wrap functions statement in parethesis to make JS think it's an expression)
+(function () {
+  console.log('This will never run again.');
+  //const isPrivate = 23; //global can not access this (scope)
+})(); //these empty parethesis call the function immediately
+
+//wont work because of scope chain
+//console.log(isPrivate);
+
+//with arrow function
+(() => console.log('This ALSO will never run again.'))(); //immediately called
+
+//functions create scopes
+//(global scope does not have access to any things
+//[such as variables] inside the functions scope)
+//the functions scope does have access to global scope
+//all data defined inside a scope is called Private
+//also called encapsulated data
+
+//sometimes need to hide/protect variables this way:
+//variables declared with let or const create own scope within a block
+//create a block
+{
+  const isPrivate = 23;
+  var notPrivate = 46;
+}
+
+//console.log(isPrivate);
+console.log(notPrivate);
+*/
+
+//////////////////////////////////////////////////////////////////
+//CLOSURES (happens automatically in certain situations)
+
+const secureBooking = function () {
+  let passengerCount = 0;
+
+  return function () {
+    passengerCount++;
+    console.log(`${passengerCount} passengers.`);
+  };
+};
+
+const booker = secureBooking(); // already finished it's execution but...
+//call booker function
+booker(); //still able to access passengerCount
+booker(); //still able to access passengerCount
+booker(); //still able to access passengerCount
+//a CLOSURE makes a function remember all the variables that existed
+//at the function's birth/origin
+//in this case booker remembers variables from origin in secureBooking
