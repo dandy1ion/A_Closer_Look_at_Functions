@@ -462,10 +462,13 @@ runOnce();
 
 //console.log(isPrivate);
 console.log(notPrivate);
-*/
+
 
 //////////////////////////////////////////////////////////////////
-//CLOSURES (happens automatically in certain situations)
+//CLOSURES
+//do NOT create manually; happens automatically
+//(can NOT access closed-over variables explicitly)
+//a closure is NOT a tangible JS object
 
 const secureBooking = function () {
   let passengerCount = 0;
@@ -484,3 +487,115 @@ booker(); //still able to access passengerCount
 //a CLOSURE makes a function remember all the variables that existed
 //at the function's birth/origin
 //in this case booker remembers variables from origin in secureBooking
+//(ANY FUNCTION ALWAYS has access to the variable environment...
+//of the exectution context in which the function was created)
+//This connection is called CLOSURE (scope chain preserved through the closure)
+//this closed over variable environment stays with the function forever
+
+//LIKE A BACKPACK :) (able to look at it in the console)
+console.dir(booker);
+
+
+//////////////////////////////////////////////////////////////////
+//MORE CLOSURE EXAMPLES
+
+//don't need to return a function from another function to create a closure
+
+//example 1
+//empty variable
+let f;
+
+//function expression
+const g = function () {
+  const a = 23;
+  //assign f to a function
+  f = function () {
+    console.log(a * 2);
+  };
+};
+
+//g(); //called and finished execution
+//f();
+//f function closes over any variables of the execution context in which it was defined
+//a variable inside the "backpack" of the f function
+
+const h = function () {
+  const b = 777;
+  f = function () {
+    console.log(b * 2);
+  };
+};
+
+g();
+f(); // f has "backpack" with a inside
+
+//inspect variable environment
+console.dir(f);
+
+//re-assigning f function in h function
+h();
+f(); // f has "backpack" with b inside
+//closure can change like this as the variable is re-assigned
+
+//inspect variable environment
+console.dir(f);
+
+//example 2
+//timer
+//function accepts n=numberPassengers & wait = wait time
+const boardPassengers = function (n, wait) {
+  const perGroup = n / 3;
+
+  //call setTimeout function
+  //two parameters:
+  //a function that will be executed
+  //after a certain time (in milliseconds)
+  setTimeout(function () {
+    console.log(`We are now boarding all ${n} passengers.`);
+    console.log(`There are 3 groups, each with ${perGroup} passengers.`);
+  }, wait * 1000); //wait time * 1 second
+
+  console.log(`Will start boarding in ${wait} seconds.`);
+};
+
+//const perGroup = 1000; //closure has priority in scope chain
+boardPassengers(180, 3);
+
+//callback function in boardPassengers executed completely independently...
+//of the boardPassengers function...
+//but the setTimout function was able to access all the variables...
+//from the variable environment in which it was created
+//closure created (setTimeout has "backpack" with n, wait & perGroup in it)
+
+//timer callback function
+//setTimeout(function () {
+//console.log('TIMER');
+//}, 1000);
+*/
+
+///////////////////////////////////////////////////////////////////
+//CODING CHALLENGE #2
+
+/* 
+This is more of a thinking challenge than a coding challenge
+
+Take the IIFE below and at the end of the function, attach an event listener that changes the color of the selected h1 element ('header') to blue, each time the BODY element is clicked. Do NOT select the h1 element again!
+
+And now explain to YOURSELF (or someone around you) WHY this worked! Take all the time you need. Think about WHEN exactly the callback function is executed, and what that means for the variables involved in this example.
+
+GOOD LUCK!!!
+
+
+(function () {
+  const header = document.querySelector('h1');
+  header.style.color = 'red';
+
+  //select the body, add the event listener of click to the body,
+  //have the function change the headers color to blue
+  document.querySelector('body').addEventListener('click', function () {
+    header.style.color = 'blue';
+  });
+})();//IIFE
+
+//callback function has access to header variable from "backpack"/"birthplace"
+*/
